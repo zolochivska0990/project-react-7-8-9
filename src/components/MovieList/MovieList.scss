@@ -1,0 +1,43 @@
+// src/components/MovieList/MovieList.scss
+.movie-list-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      
+      h2 {
+        font-size: 24px;
+        color: #333;
+      }
+      
+      .search-input {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        font-size: 16px;
+        width: 300px;
+        outline: none;
+        transition: all 0.3s;
+        
+        &:focus {
+          border-color: #1976d2;
+          box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+      }
+    }
+    
+    .movie-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
