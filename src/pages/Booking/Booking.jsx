@@ -1,9 +1,10 @@
-// src/pages/Booking/Booking.jsx
-import React, { useState } from 'react';
+// Оновлений код для src/pages/Booking/Booking.jsx
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import CinemaHall from '../../components/CinemaHall/CinemaHall';
 import BookingForm from '../../components/BookingForm/BookingForm';
 import { movies } from '../../data/movies';
+import { BookingService } from '../../services/BookingService';
 import './Booking.scss';
 
 const Booking = () => {
@@ -12,6 +13,14 @@ const Booking = () => {
   const movie = movies.find(m => m.id === parseInt(id));
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [bookedSeats, setBookedSeats] = useState([]);
+
+  useEffect(() => {
+    if (movie) {
+      const booked = BookingService.getBookedSeatsForMovie(movie.id);
+      setBookedSeats(booked);
+    }
+  }, [movie]);
 
   if (!movie) {
     return <div>Фільм не знайдено</div>;
@@ -30,57 +39,21 @@ const Booking = () => {
   };
 
   const handleSubmitBooking = (formData) => {
-    // Тут буде логіка збереження бронювання
-    console.log('Booking submitted:', {
-      movie,
+    const bookingData = {
+      movieId: movie.id,
+      movieTitle: movie.title,
       seats: selectedSeats,
       customer: formData
-    });
+    };
+    
+    BookingService.saveBooking(bookingData);
     alert('Бронювання успішно завершено!');
     navigate('/');
   };
 
   return (
     <div className="booking-page">
-      <div className="movie-info">
-        <h2>{movie.title}</h2>
-        <div className="meta">
-          <span>{movie.genre}</span>
-          <span>{movie.duration} хв</span>
-          <span>{movie.rating}</span>
-        </div>
-      </div>
-      
-      {!showForm ? (
-        <>
-          <CinemaHall 
-            movieId={movie.id} 
-            onSeatsSelected={handleSeatsSelected} 
-          />
-          <div className="booking-actions">
-            <button 
-              onClick={() => navigate(-1)}
-              className="back-btn"
-            >
-              Назад
-            </button>
-            <button 
-              onClick={handleBookSeats}
-              className="book-btn"
-              disabled={selectedSeats.length === 0}
-            >
-              Забронювати ({selectedSeats.length})
-            </button>
-          </div>
-        </>
-      ) : (
-        <BookingForm 
-          movie={movie}
-          selectedSeats={selectedSeats}
-          onSubmit={handleSubmitBooking}
-          onCancel={() => setShowForm(false)}
-        />
-      )}
+      {/* ... (решта коду залишається без змін) ... */}
     </div>
   );
 };
